@@ -40,6 +40,7 @@ class ChatScreen extends StatefulWidget {
 class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
   final List<ChatMessage> _messages = <ChatMessage>[];
   final TextEditingController _textController = new TextEditingController();
+  bool _isComposing = false;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +87,11 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             new Flexible(
               child: new TextField(
                 controller: _textController,
+                onChanged: (String text) {
+                  setState(() {
+                    _isComposing = text.length > 0;
+                  });
+                },
                 onSubmitted: _handleSubmitted,
                 decoration: new InputDecoration.collapsed(hintText: 'Write some stuff'),
               ),
@@ -96,7 +102,9 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               margin: new EdgeInsets.symmetric(horizontal: 4.0),
               child: new IconButton(
                 icon: new Icon(Icons.send),
-                onPressed: () => _handleSubmitted(_textController.text)
+                onPressed: _isComposing
+                  ? () => _handleSubmitted(_textController.text)
+                  : null,
               ),
             ),
 
@@ -110,6 +118,9 @@ class ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
     // Delete the text from the text input field.
     _textController.clear();
+    setState(() {
+      _isComposing = false;
+    });
 
     // Add the message to the list.
     ChatMessage message = new ChatMessage(
@@ -142,7 +153,7 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new SizeTransition(
+    return new SizeTransition(   // 2do: Add "FadeTransition" instead!
       sizeFactor: new CurvedAnimation(
         parent: animationController,
         curve: Curves.easeIn
