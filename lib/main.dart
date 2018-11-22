@@ -172,17 +172,21 @@ class ChatMessage extends StatelessWidget {
             ),
 
             // Message box.
-            new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+            new Expanded(
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
 
-                new Text(_name, style: Theme.of(context).textTheme.subhead),
-                new Container(
-                  margin: const EdgeInsets.only(top: 5.0),
-                  child: new Text(text),
-                )
-
-              ],
+                  // Name of user.
+                  new Text(_name, style: Theme.of(context).textTheme.subhead),
+                  // Chat message.
+                  new Container(
+                    margin: const EdgeInsets.only(top: 5.0),
+                    child: new Text(text),
+                  )
+                  
+                ],
+              ),
             ),
 
           ],
